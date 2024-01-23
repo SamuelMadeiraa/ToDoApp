@@ -1,45 +1,30 @@
+# app/controllers/notes_controller.rb
 class NotesController < ApplicationController
-    before_action :set_note, only: %i[show edit update destroy]
+    before_action :authenticate_user!
   
     def index
-      @notes = Note.all
+      @user = current_user
+      @notes = @user.notes
     end
-  
-    def show; end
-  
+    def show
+    end
+    
     def new
       @note = Note.new
     end
   
     def create
-      @note = Note.new(note_params)
+      @user = current_user
+      @note = @user.notes.create(note_params)
+  
       if @note.save
-        redirect_to @note, notice: 'Note was successfully created.'
+        redirect_to notes_path, notice: 'Nota criada com sucesso!'
       else
         render :new
       end
     end
   
-    def edit; end
-  
-    def update
-      if @note.update(note_params)
-        redirect_to @note, notice: 'Note was successfully updated.'
-      else
-        render :edit
-      end
-    end
-  
-    def destroy
-      @note.destroy
-      redirect_to notes_url, notice: 'Note was successfully destroyed.'
-    end
-  
     private
-  
-    def set_note
-      @note = Note.find(params[:id])
-    end
   
     def note_params
       params.require(:note).permit(:title, :content)

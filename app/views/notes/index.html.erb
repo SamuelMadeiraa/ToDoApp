@@ -1,3 +1,12 @@
+<% if user_signed_in? %>
+   <p>Usuario Logado</p> <%= current_user.email %>
+<% else %>
+    <p>Usuario Nâo Logado</p> <%= current_user.email %>
+<% end %>
+
+<%= button_to("Log Out", destroy_user_session_path, method: :delete) %>
+<%= button_to("SIGN iN", new_user_session_path) %>
+
 <h1>Notes</h1>
 <%= link_to 'New Note', new_note_path %>
 <ul>
